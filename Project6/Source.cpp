@@ -14,23 +14,6 @@ class Date_Time;
 
 HubNode* hubSearch (string);
 
-void printHub()
-{
-	hubTemp = head;
-	
-	while (hubTemp != NULL)
-	{
-		FlightNode *flight = hubTemp -> headFlights;
-		cout << hubTemp -> Name << ' ' << hubTemp -> Location << endl;
-		while (flight != NULL)
-		{
-			cout << flight -> flightNumber << endl;
-			flight = flight -> next;
-		}
-		hubTemp = hubTemp -> next;
-	}
-}
-
 void freeHub()
 {
 	while (head != NULL)
@@ -114,8 +97,9 @@ int main () {
 	else cout << "Unable to open file";
 	Date_Time start = Date_Time(00,0, 16, 12,2013);
 	Date_Time end = Date_Time(59,23,18,12,2013);
-	flightSearch(start, end, "Los Angeles", 3, "Cheapest");
-	printHub();
+	Date_Time *startTest = &start, *endTest = &end;
+
+	flightSearch(startTest, endTest, "Los Angeles", 3, "Cheapest");
 	cout << '\n';
 	freeHub();
 	cin >> x;
