@@ -16,9 +16,10 @@ using namespace std;
 class Date_Time;
 class FlightNode;
 class HubNode;
+class Search;
 
-void cheapest_search();
-void shortest_search();
+void cheapest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate, int total_bags);
+void shortest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate);
 
 HubNode *head = NULL, *hubTemp;
 FlightNode *flightTemp;
@@ -26,85 +27,100 @@ FlightNode *flightTemp;
 class Search
 {
 public:
-  int total_bags;
+	int total_bags;
 
-  Date_Time *time;
-  Date_Time *endTime;
-  FlightNode *node[2];
-  HubNode *source;
-  HubNode *destination;
+	Date_Time *time;
+	Date_Time *endTime;
+	FlightNode *node[2];
+	HubNode *source;
+	HubNode *destination;
 
 	Search::Search()
 	{
 		time = new Date_Time();
 	}
-
-Search::~Search()
-{
-	delete time;
-	source = NULL;
-	destination = NULL;
-}
-
-float Search::cost(int flight_bags) 
-{
-	float cost;
-
-	cost = (float) total_bags;
-
-	if(node[0] == NULL)
-	{
-		return -1;
-	}
-
-	else
-	{
-	   for (int i = 0; (i < 2 && node[i] != NULL); i++)
-	   {
-		 node[i]->setBags(flight_bags);
-		 cost = cost + (float) node[i]->price + (float) node[i]->getBaggageFees();
-	   }
-	}
-    
-	return cost;
-}
-
-
-Date_Time* Search::endtime() 
-{
-	int tempIT = 0;
-
 	
-	Date_Time* flight_arrival = node[0]->arriveAt;
-
-	while (node[tempIT] != NULL && tempIT < 2)
+	Search::~Search()
 	{
-		flight_arrival = node[tempIT]->arriveAt;
-		tempIT++;
+		delete time;
+		source = NULL;
+		destination = NULL;
 	}
-
-	return flight_arrival;
-}
-
-int Search::flight_time() 
-{
-	int total_time = 0;
-
-	if (node[0] == NULL)
+	
+	float Search::cost(int flight_bags) 
 	{
-		return -1;
-	}
-
-	for (int i = 0; i < 2; i++)
-	{
-		if (node[i] != NULL)
+		float cost;
+	
+		cost = (float) total_bags;
+	
+		if(node[0] == NULL)
 		{
-			total_time += node[i]->duration + node[i]-> getDelay();
+			return -1;
+		}
+	
+		else
+		{
+		   for (int i = 0; (i < 2 && node[i] != NULL); i++)
+		   {
+			 node[i]->setBags(flight_bags);
+			 cost = cost + (float) node[i]->price + (float) node[i]->getBaggageFees();
+		   }
+		}
+	    
+		return cost;
+	}
+
+	void printHub()
+	{
+		hubTemp = head;
+		
+		while (hubTemp != NULL)
+		{
+			FlightNode *flight = hubTemp -> headFlights;
+			cout << hubTemp -> Name << ' ' << hubTemp -> Location << endl;
+			while (flight != NULL)
+			{
+				cout << flight -> flightNumber << endl;
+				flight = flight -> next;
+			}
+			hubTemp = hubTemp -> next;
 		}
 	}
 
-	return total_time;
-}
+	Date_Time* Search::endtime() 
+	{
+		int tempIT = 0;
+		
+		Date_Time* flight_arrival = node[0]->arriveAt;
+	
+		while (node[tempIT] != NULL && tempIT < 2)
+		{
+			flight_arrival = node[tempIT]->arriveAt;
+			tempIT++;
+		}
+	
+		return flight_arrival;
+	}
+	
+	int Search::flight_time() 
+	{
+		int total_time = 0;
+
+		if (node[0] == NULL)
+		{
+			return -1;
+		}
+		
+		for (int i = 0; i < 2; i++)
+		{
+			if (node[i] != NULL)
+			{
+				total_time += node[i]->duration + node[i]-> getDelay();
+			}
+		}
+
+		return total_time;
+	}
 };
 
 HubNode* hubSearch(string search)
@@ -163,7 +179,7 @@ void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, 
 
 void cheapest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate, int total_bags)
 {
-	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && timeBetween(startDate, flight_temp->time) >= 0 && timeBetween(flight_temp->endtime(), endDate) >=0 )
+	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && dateCompare(startDate, flight_temp->time) == 0 && dateCompare(flight_temp->endtime(), endDate) == 1 )
 	{
 		float cheapestCost = search_temp->cost(total_bags);
 		float lowestCost_temp = flight_temp->cost(total_bags);
@@ -195,13 +211,13 @@ void cheapest_Search(HubNode* source, string destination, Search* search_temp, S
 				flight_temp->node[0] = NULL;
 				flight_temp->node[1] = NULL;
 			}
-			if (flight_temp->node[0] == NULL || timeBetween(flight_temp->endtime(), flightNode_temp->departure) >= 0 ) 
+			if (flight_temp->node[0] == NULL || dateCompare(flight_temp->endtime(), flightNode_temp->departure) >= 0 ) 
 			{
 				flight_temp->node[depth] = flightNode_temp;
 				flight_temp->destination = flightNode_temp->destination;
 				*flight_temp->time = *flightNode_temp->departure;
 				flight_temp->time->AddMinutes(flightNode_temp->getDelay());
-				cheapest_Search(flightNode_temp->destination,destination, search_temp, flight_temp, (depth + 1), startDate, endDate);
+				cheapest_Search(flightNode_temp->destination,destination, search_temp, flight_temp, (depth + 1), startDate, endDate, total_bags);
 			}
 
 			flightNode_temp = flightNode_temp->next;
@@ -211,7 +227,7 @@ void cheapest_Search(HubNode* source, string destination, Search* search_temp, S
 
 void shortest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate) 
 {
-	if (flight_temp->destination != NULL && flight_temp->destination->location.compare(destination) == 0 && timeBetween(startDate, flight_temp->time) >= 0 && timeBetween(flight_temp->endtime(), endDate) >=0 ) 
+	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && dateCompare(startDate, flight_temp->time) >= 0 && dateCompare(flight_temp->endtime(), endDate) >=0 ) 
 	{
 		int leastFlightTime = search_temp->flight_time();
 		int time_Temp = flight_temp->flight_time();
@@ -246,7 +262,7 @@ void shortest_Search(HubNode* source, string destination, Search* search_temp, S
 				flight_temp->node[1] = NULL;
 			}
 
-			if (flight_temp->node[0] == NULL || timeBetween(flight_temp->endtime(), flightNode_temp->departure) >= 0 ) 
+			if (flight_temp->node[0] == NULL || dateCompare(flight_temp->endtime(), flightNode_temp->departure) >= 0 ) 
 			{
 				flight_temp->node[depth] = flightNode_temp;
 				flight_temp->destination = flightNode_temp->destination;
