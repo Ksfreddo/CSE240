@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Date_Time.h"
 
 using namespace std;
 
@@ -9,10 +10,8 @@ class HubNode;
 class Date_Time;
 class FlightPlan;
 
-typedef enum {Junk, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec} Month;
-
 HubNode *head = NULL, *hubTemp;
-FlightNode *flightHead = NULL, *flightTemp;
+FlightNode *flightTemp;
 
 class HubNode {
 public:	
@@ -39,66 +38,6 @@ public:
 
 HubNode* hubSearch (string);
 
-class Date_Time {
-public:
-	int minutes;
-	int hours;
-	int day;
-	int month;
-	int year;
-
-	Date_Time::Date_Time()
-	{
-	}
-
-	Date_Time::Date_Time(int a, int b, int c, int d, int e)
-	{
-		minutes = a;
-		hours = b;
-		day = c;
-		month = d;
-		year = e;
-	}
-
-	void AddMinutes(int min)
-	{
-		minutes = minutes + min;
-		if (minutes >= 60)
-		{
-			minutes = minutes - 60;
-			hours++;
-			if (hours >= 24)
-			{
-				hours = hours - 24;
-				day++;
-				if (day > 29 && month == Feb)
-				{
-					day = day-29;
-					month++;
-				}else if (day > 30 && month == Apr||month ==Jun||month ==Sept||month ==Nov)
-				{
-					day = day-30;
-					month++;
-				}else if(day > 31)
-				{
-					day = day-31;
-					month++;
-				}
-				if (month > Dec)
-				{
-					month = Jan;
-					year++;
-				}
-			}
-		}
-	}
-
-	void toString()
-	{
-		cout<< hours << ":" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
-	}
-};
-
 class FlightNode {
 public:
 	string flightNumber;
@@ -117,7 +56,7 @@ public:
 	int getBaggageFees();
 	int getDelay();
 
-	virtual ~FlightNode()
+	/*virtual ~FlightNode()
 	{
 		do
 		{
@@ -125,7 +64,7 @@ public:
 			delete flightHead;
 			flightHead = flightTemp;
 		}while (flightHead != NULL);
-	}
+	}*/
 };
 
 class FlightPlan
@@ -135,11 +74,16 @@ class FlightPlan
 
 class Southwest: public FlightNode
 {
+public:
 	int bags;
 
-	Southwest(int noOfBags): FlightNode()
+	Southwest(): FlightNode()
 	{
-		bags = noOfBags;
+	}
+
+	void setBags(int Bags)
+	{
+		bags = Bags;
 	}
 
 	int getBaggageFees()
@@ -161,11 +105,16 @@ class Southwest: public FlightNode
 
 class Delta: public FlightNode
 {
+public:
 	int bags;
 
-	Delta(int noOfBags): FlightNode()
+	Delta(): FlightNode()
 	{
-		bags = noOfBags;
+	}
+
+	void setBags(int Bags)
+	{
+		bags = Bags;
 	}
 
 	int getBaggageFees()
@@ -181,11 +130,16 @@ class Delta: public FlightNode
 
 class USAirways: public FlightNode
 {
+public:
 	int bags;
 	
-	USAirways(int noOfBags): FlightNode()
+	USAirways(): FlightNode()
 	{
-		bags = noOfBags;
+	}
+
+	void setBags(int Bags)
+	{
+		bags = Bags;
 	}
 
 	int getBaggageFees()
@@ -221,21 +175,6 @@ void printHub()
 	}
 }
 
-void printFlight()
-{
-	flightTemp = flightHead;
-	while (flightTemp != NULL)
-	{
-		cout << flightTemp -> flightNumber << ' ' << flightTemp -> price << ' ' << flightTemp ->
-			flightCompany << ' ';
-		flightTemp -> departure.toString();
-		cout << flightTemp -> source -> Name << ' ' << flightTemp -> destination -> Name << ' ' << flightTemp ->
-			duration << '\n';
-
-		flightTemp = flightTemp -> next;
-	}
-}
-
 void freeHub()
 {
 	while (head != NULL)
@@ -243,16 +182,6 @@ void freeHub()
 		hubTemp = head->next;
 		free(head);
 		head = hubTemp;
-	}
-}
-
-void freeFlight()
-{
-	while (flightHead != NULL)
-	{
-		flightTemp = flightHead->next;
-		free(flightHead);
-		flightHead = flightTemp;
 	}
 }
 
@@ -264,9 +193,8 @@ int main () {
 	if (myfile.is_open() && myfile != NULL)
 	{
 		getline(myfile, skipline);
-		while (myfile.good())
+		while (getline(myfile, hubTemp -> Name, ','))
 		{
-			getline(myfile, hubTemp -> Name, ',');
 			getline(myfile, hubTemp -> Location);
 
 			hubTemp -> next = head;
@@ -274,15 +202,12 @@ int main () {
 			hubTemp = new HubNode;
 	    }
 		myfile.close();
-		hubTemp = head ->next;
-		free(head);
-		head = hubTemp;
+
 	}
 	else cout << "Unable to open file"; 
 
 	printHub();
 
-	flightTemp = new FlightNode;
 	string passline, number, price, source, destination, departuremin,departurehour,
 		departureday,departuremonth,departureyear,duration, company;
 	int min, hour, day, month, year;
@@ -290,9 +215,8 @@ int main () {
 	if (flightfile.is_open() && flightfile != NULL)
 	{
 		getline(flightfile, passline);
-		while ( flightfile.good() )
+		while (getline(flightfile, number, ',') )
 		{
-			getline(flightfile, flightTemp -> flightNumber, ',');
 			getline(flightfile, price, ',');
 			getline(flightfile, source, ',');
 			getline(flightfile, destination, ',');
@@ -302,8 +226,16 @@ int main () {
 			getline(flightfile, departuremonth, '/');
 			getline(flightfile, departureyear, ',');
 			getline(flightfile, duration, ',');
-			getline(flightfile, flightTemp -> flightCompany);
+			getline(flightfile, company);
 
+			if (company.compare("Southwest") == 0)
+				flightTemp = new Southwest();
+			else if (company.compare("Delta") == 0)
+				flightTemp = new Delta();
+			else if (company.compare("USAirway") == 0)
+				flightTemp = new USAirways();
+
+			flightTemp ->flightNumber = number;
 			flightTemp -> price = atof(price.c_str());
 			min = atoi(departuremin.c_str());
 			hour = atoi(departurehour.c_str());
@@ -317,22 +249,15 @@ int main () {
 			flightTemp -> departure = y;
 			flightTemp -> source = hubSearch(source);
 			flightTemp -> destination = hubSearch(destination);
-			flightTemp -> next = flightHead;
-			flightHead = flightTemp;
-			flightTemp = new FlightNode;
+			flightTemp -> next = flightTemp -> source -> headFlights;
+			flightTemp -> source -> headFlights = flightTemp;
 	    }
 		myfile.close();
-
-		flightTemp = flightHead -> next;
-		free(flightHead);
-		flightHead = flightTemp;
 	}
 	else cout << "Unable to open file";
 	
 	cout << '\n';
-	printFlight();
 	freeHub();
-	freeFlight();
 	cin >> x;
 }
 
