@@ -26,9 +26,9 @@ public:
 		next = NULL;
 	}
 
-	int setBags(int Bags);
-	int getBaggageFees();
-	int getDelay();
+	virtual void setBags(int Bags);
+	virtual int getBaggageFees();
+	virtual int getDelay();
 
 	virtual ~FlightNode()
 	{
