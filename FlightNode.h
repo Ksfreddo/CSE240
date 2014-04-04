@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Date_Time.h"
+#include "HubNode.h"
 
 using namespace std;
 
@@ -12,7 +14,8 @@ public:
 	string flightNumber;
 	double price;
 	string flightCompany;
-	Date_Time departure;
+	Date_Time *departure;
+	Date_Time *arriveAt;
 	int duration;
 	HubNode* source;
 	HubNode* destination;
@@ -20,29 +23,33 @@ public:
 
 	FlightNode::FlightNode()
 	{
+		next = NULL;
 	}
 
+	int setBags(int Bags);
 	int getBaggageFees();
 	int getDelay();
 
 	virtual ~FlightNode()
 	{
-		do
-		{
-			flightTemp = flightHead->next;
-			delete flightHead;
-			flightHead = flightTemp;
-		}while (flightHead != NULL);
+		source = NULL;
+		destination = NULL;
+		next = NULL;
 	}
 };
 
 class Southwest: public FlightNode
 {
+public:
 	int bags;
 
-	Southwest(int noOfBags): FlightNode()
+	Southwest(): FlightNode()
 	{
-		bags = noOfBags;
+	}
+
+	void setBags(int Bags)
+	{
+		bags = Bags;
 	}
 
 	int getBaggageFees()
@@ -55,7 +62,7 @@ class Southwest: public FlightNode
 
 	int getDelay()
 	{
-		if (departure.hours >= 7 || departure.hours <= 17)
+		if (departure->hours >= 7 || departure->hours <= 17)
 			return 30;
 		else
 			return 0;
@@ -64,11 +71,16 @@ class Southwest: public FlightNode
 
 class Delta: public FlightNode
 {
+public:
 	int bags;
 
-	Delta(int noOfBags): FlightNode()
+	Delta(): FlightNode()
 	{
-		bags = noOfBags;
+	}
+
+	void setBags(int Bags)
+	{
+		bags = Bags;
 	}
 
 	int getBaggageFees()
@@ -81,13 +93,19 @@ class Delta: public FlightNode
 		return 20;
 	}
 };
+
 class USAirways: public FlightNode
 {
+public:
 	int bags;
 	
-	USAirways(int noOfBags): FlightNode()
+	USAirways(): FlightNode()
 	{
-		bags = noOfBags;
+	}
+
+	void setBags(int Bags)
+	{
+		bags = Bags;
 	}
 
 	int getBaggageFees()
@@ -104,9 +122,9 @@ class USAirways: public FlightNode
 
 	int getDelay()
 	{
-		if (departure.hours >= 7 || departure.hours <= 17)
+		if (departure->hours >= 7 || departure->hours <= 17)
 			return 10;
-		else if (departure.hours > 17 || departure.hours <= 1)
+		else if (departure->hours > 17 || departure->hours <= 1)
 			return 15;
 		else
 			return 0;
