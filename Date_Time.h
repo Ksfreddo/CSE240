@@ -5,6 +5,10 @@
 #include <fstream>
 #include <string>
 
+using namespace std;
+
+typedef enum {Junk, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec} Month;
+
 class Date_Time{
 public:
 	int minutes;
@@ -61,9 +65,8 @@ public:
 
 	void toString()
 	{
-		cout<< hours << ":" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
+		cout << hours << ":" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
 	}
 };
 
 #endif
-
