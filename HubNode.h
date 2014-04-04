@@ -1,5 +1,13 @@
-#ifndef HubNode
-#define HubNode
+#ifndef HubNode_h
+#define HubNode_h
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "FlightNode.h"
+
+using namespace std;
+class FlightNode;
 
 class HubNode {
 public:	
@@ -10,17 +18,13 @@ public:
 
 	HubNode::HubNode()
 	{
+		next = NULL;
+		headFlights = NULL;
 	}
-	
-	virtual ~HubNode()
-	{
-		do
-		{
-			hubTemp = head->next;
-			delete head;
-			head = hubTemp;
-		}while (head != NULL);
 
+	HubNode::~HubNode()
+	{
+		next = NULL;
 	}
 };
 
