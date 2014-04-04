@@ -120,21 +120,3 @@ int main () {
 	freeHub();
 	cin >> x;
 }
-
-HubNode* hubSearch(string search)
-{
-	HubNode *p = head, *b = p;
-
-	while (p != NULL)
-	{
-		if (search.compare(p -> Name) == 0)
-		{
-			return p;
-		}
-		else
-		{
-			b = p;
-			p = p-> next;
-		}
-	}
-}
