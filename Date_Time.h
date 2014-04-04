@@ -69,4 +69,14 @@ public:
 	}
 };
 
+int dateCompare(Date_Time* check, Date_Time* flight)
+{
+	if (flight->day >= check->day && flight->month >= check->month && flight->year >= check->year)
+		return 0;
+	else if(flight->day <= check->day && flight->month <= check->month && flight->year <= check->year)
+		return 1;
+	else
+		return -1;
+}
+
 #endif
