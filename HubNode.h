@@ -9,7 +9,7 @@
 using namespace std;
 class FlightNode;
 
-class HubNode {
+class HubNode { //Class for airport terminals.
 public:	
 	string Name;
 	string Location;
