@@ -16,13 +16,13 @@ public:
 	HubNode* next;
 	FlightNode* headFlights;
 
-	HubNode::HubNode()
+	HubNode()
 	{
 		next = NULL;
 		headFlights = NULL;
 	}
 
-	HubNode::~HubNode()
+	~HubNode()
 	{
 		next = NULL;
 	}

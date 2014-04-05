@@ -1,5 +1,5 @@
-#ifndef FlightPlan
-#define FlightPlan
+#ifndef FlightPlan_H
+#define FlightPlan_H
 
 #include <iostream>
 #include <fstream>
@@ -16,6 +16,6 @@ class Date_Time;
 class FlightPlan
 {
 	FlightNode *flights[2];
-}
+};
 
 #endif

@@ -17,11 +17,11 @@ public:
 	int month;
 	int year;
 
-	Date_Time::Date_Time()
+	Date_Time()
 	{
 	}
 
-	Date_Time::Date_Time(int a, int b, int c, int d, int e)
+	Date_Time(int a, int b, int c, int d, int e)
 	{
 		minutes = a;
 		hours = b;

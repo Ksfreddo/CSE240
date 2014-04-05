@@ -9,6 +9,8 @@
 
 using namespace std;
 
+class HubNode;
+
 class FlightNode {
 public:
 	string flightNumber;
@@ -21,14 +23,14 @@ public:
 	HubNode* destination;
 	FlightNode * next;
 
-	FlightNode::FlightNode()
+	FlightNode()
 	{
 		next = NULL;
 	}
 
-	virtual void setBags(int Bags);
-	virtual int getBaggageFees();
-	virtual int getDelay();
+	virtual void setBags(int Bags) {};
+	virtual int getBaggageFees() {};
+	virtual int getDelay() {};
 
 	virtual ~FlightNode()
 	{
