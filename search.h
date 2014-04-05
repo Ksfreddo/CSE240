@@ -35,19 +35,19 @@ public:
 	HubNode *source;
 	HubNode *destination;
 
-	Search::Search()
+	Search()
 	{
 		time = new Date_Time();
 	}
 	
-	Search::~Search()
+	~Search()
 	{
 		delete time;
 		source = NULL;
 		destination = NULL;
 	}
 	
-	float Search::cost(int flight_bags) 
+	float cost(int flight_bags) 
 	{
 		float cost;
 	
@@ -87,7 +87,7 @@ public:
 		}
 	}
 
-	Date_Time* Search::endtime() 
+	Date_Time* endtime() 
 	{
 		int tempIT = 0;
 		
@@ -102,7 +102,7 @@ public:
 		return flight_arrival;
 	}
 	
-	int Search::flight_time() 
+	int flight_time() 
 	{
 		int total_time = 0;
 
