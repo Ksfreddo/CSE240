@@ -1,5 +1,5 @@
-#ifndef FlightNode_h
-#define FlightNode_h
+#ifndef FlightNode_H
+#define FlightNode_H
 
 #include <iostream>
 #include <fstream>
@@ -8,8 +8,6 @@
 #include "HubNode.h"
 
 using namespace std;
-
-class HubNode;
 
 class FlightNode {
 public:
@@ -23,20 +21,26 @@ public:
 	HubNode* destination;
 	FlightNode * next;
 
-	FlightNode()
+	FlightNode::FlightNode()
 	{
 		next = NULL;
 	}
-
-	virtual void setBags(int Bags) {};
-	virtual int getBaggageFees() {};
-	virtual int getDelay() {};
 
 	virtual ~FlightNode()
 	{
 		source = NULL;
 		destination = NULL;
 		next = NULL;
+	}
+
+	virtual void FlightNode::setBags(int Bags) {}
+	virtual int FlightNode::getBaggageFees()
+	{
+		return 0;
+	}
+	virtual int FlightNode::getDelay()
+	{
+		return 0;
 	}
 };
 
@@ -49,12 +53,12 @@ public:
 	{
 	}
 
-	void setBags(int Bags)
+	void Southwest::setBags(int Bags)
 	{
 		bags = Bags;
 	}
 
-	int getBaggageFees()
+	int Southwest::getBaggageFees()
 	{
 		int fees;
 		
@@ -62,7 +66,7 @@ public:
 		return fees;
 	}
 
-	int getDelay()
+	int Southwest::getDelay()
 	{
 		if (departure->hours >= 7 || departure->hours <= 17)
 			return 30;
@@ -80,17 +84,17 @@ public:
 	{
 	}
 
-	void setBags(int Bags)
+	void Delta::setBags(int Bags)
 	{
 		bags = Bags;
 	}
 
-	int getBaggageFees()
+	int Delta::getBaggageFees()
 	{
 		return 0;
 	}
 
-	int getDelay()
+	int Delta::getDelay()
 	{
 		return 20;
 	}
@@ -105,12 +109,12 @@ public:
 	{
 	}
 
-	void setBags(int Bags)
+	void USAirways::setBags(int Bags)
 	{
 		bags = Bags;
 	}
 
-	int getBaggageFees()
+	int USAirways::getBaggageFees()
 	{
 		int fees;
 		
@@ -122,7 +126,7 @@ public:
 		return fees;
 	}
 
-	int getDelay()
+	int USAirways::getDelay()
 	{
 		if (departure->hours >= 7 || departure->hours <= 17)
 			return 10;
