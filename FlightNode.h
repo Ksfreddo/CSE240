@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class FlightNode {
+class FlightNode { //parent class
 public:
 	string flightNumber;
 	double price;
@@ -44,7 +44,7 @@ public:
 	}
 };
 
-class Southwest: public FlightNode
+class Southwest: public FlightNode //child class of FlighNode
 {
 public:
 	int bags;
@@ -58,7 +58,7 @@ public:
 		bags = Bags;
 	}
 
-	int Southwest::getBaggageFees()
+	int Southwest::getBaggageFees() //Baggage fee calculation
 	{
 		int fees;
 		
@@ -66,7 +66,7 @@ public:
 		return fees;
 	}
 
-	int Southwest::getDelay()
+	int Southwest::getDelay() //Delay calculation
 	{
 		if (departure->hours >= 7 || departure->hours <= 17)
 			return 30;
@@ -75,7 +75,7 @@ public:
 	}
 };
 
-class Delta: public FlightNode
+class Delta: public FlightNode //child class of FlighNode
 {
 public:
 	int bags;
@@ -89,18 +89,18 @@ public:
 		bags = Bags;
 	}
 
-	int Delta::getBaggageFees()
+	int Delta::getBaggageFees() //No baggage fees
 	{
 		return 0;
 	}
 
-	int Delta::getDelay()
+	int Delta::getDelay() //same delay
 	{
 		return 20;
 	}
 };
 
-class USAirways: public FlightNode
+class USAirways: public FlightNode //child class of FlighNode
 {
 public:
 	int bags;
@@ -114,7 +114,7 @@ public:
 		bags = Bags;
 	}
 
-	int USAirways::getBaggageFees()
+	int USAirways::getBaggageFees() //Baggage fee calculation
 	{
 		int fees;
 		
@@ -126,7 +126,7 @@ public:
 		return fees;
 	}
 
-	int USAirways::getDelay()
+	int USAirways::getDelay() //Delay calculation
 	{
 		if (departure->hours >= 7 || departure->hours <= 17)
 			return 10;
