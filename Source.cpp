@@ -74,6 +74,7 @@ int main () {
 				flightTemp = new USAirways();
 
 			flightTemp ->flightNumber = number;
+			flightTemp ->flightCompany = company;
 			flightTemp -> price = atof(price.c_str());
 			min = atoi(departuremin.c_str());
 			hour = atoi(departurehour.c_str());
@@ -84,9 +85,9 @@ int main () {
 
 			Date_Time depart = Date_Time(min, hour, day, month, year);
 			Date_Time arrive = depart;
-			arrive.AddMinutes((flightTemp->duration + flightTemp->getDelay()));
-			
 			flightTemp -> departure = &depart;
+			arrive.AddMinutes((flightTemp->duration + flightTemp->getDelay()));
+
 			hubTemp = hubSearch(source);
 			flightTemp -> source = hubTemp;
 			flightTemp -> destination = hubSearch(destination);
@@ -96,8 +97,8 @@ int main () {
 		myfile.close();
 	}
 	else cout << "Unable to open file";
-	Date_Time start = Date_Time(00,0, 16, 12,2013);
-	Date_Time end = Date_Time(59,23,18,12,2013);
+	Date_Time start = Date_Time(00, 0, 16, 12, 2013);
+	Date_Time end = Date_Time(59, 23, 18, 12, 2013);
 	Date_Time *startTest = &start, *endTest = &end;
 
 	flightSearch(startTest, endTest, "Los Angeles", 3, "Cheapest");
