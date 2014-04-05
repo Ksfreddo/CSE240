@@ -12,7 +12,7 @@
 #pragma warning(disable: 4996)
 
 using namespace std;
-
+//forward declarations
 class Date_Time;
 class FlightNode;
 class HubNode;
@@ -24,7 +24,7 @@ void shortest_Search(HubNode* source, string destination, Search* search_temp, S
 HubNode *head = NULL, *hubTemp;
 FlightNode *flightTemp;
 
-class Search
+class Search 
 {
 public:
 	int total_bags;
@@ -47,7 +47,7 @@ public:
 		destination = NULL;
 	}
 	
-	float cost(int flight_bags) 
+	float cost(int flight_bags) //calculates cost+ any baggage fees
 	{
 		float cost;
 	
@@ -70,7 +70,7 @@ public:
 		return cost;
 	}
 
-	void printHub()
+	void printHub() //prints info in hub
 	{
 		hubTemp = head;
 		
@@ -102,7 +102,7 @@ public:
 		return flight_arrival;
 	}
 	
-	int flight_time() 
+	int flight_time() // prints out total time of flights
 	{
 		int total_time = 0;
 
@@ -123,7 +123,7 @@ public:
 	}
 };
 
-HubNode* hubSearch(string search)
+HubNode* hubSearch(string search) //search through hubs
 {
 	HubNode *p = head, *b = p;
 
@@ -142,7 +142,7 @@ HubNode* hubSearch(string search)
 }
 
 void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, int total_bags, string searchMethod) 
-{
+{	//searches through flights
 	Search* search_temp = new Search();
 	Search* flight_temp = new Search();
 
@@ -178,7 +178,7 @@ void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, 
 
 
 void cheapest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate, int total_bags)
-{
+{	//algorithim for cheapest flight
 	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && dateCompare(startDate, flight_temp->time) == 0 && dateCompare(flight_temp->endtime(), endDate) == 1 )
 	{
 		float cheapestCost = search_temp->cost(total_bags);
@@ -226,7 +226,7 @@ void cheapest_Search(HubNode* source, string destination, Search* search_temp, S
 }
 
 void shortest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate) 
-{
+{	//algorithim for shortest flight
 	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && dateCompare(startDate, flight_temp->time) >= 0 && dateCompare(flight_temp->endtime(), endDate) >=0 ) 
 	{
 		int leastFlightTime = search_temp->flight_time();
