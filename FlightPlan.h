@@ -15,7 +15,7 @@ class Date_Time;
 
 class FlightPlan
 {
-	FlightNode *flights[2];
+	FlightNode *flights[2]; //Array to hold the different flights
 };
 
 #endif
