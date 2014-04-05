@@ -35,12 +35,12 @@ public:
 		minutes = minutes + min;
 		if (minutes >= 60)
 		{
-			minutes = minutes - 60;
-			hours++;
+			hous += minutes/60;
+			minutes = minutes % 60;
 			if (hours >= 24)
 			{
-				hours = hours - 24;
-				day++;
+				day += hours/24;
+				hours = hours % 24;
 				if (day > 29 && month == Feb)
 				{
 					day = day-29;
