@@ -64,16 +64,17 @@ public:
 		}
 	}
 
-	void toString()
+	string toString()
 	{
 		if (minutes < 10)
 		{
-			cout << hours << ":0" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
+			cout << month << "/"<< day << "/"<< year << " "<< hours << ":0" << minutes <<endl;
 		}
 		else
 		{
-			cout << hours << ":" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
+			cout <<   month << "/"<< day << "/"<< year << " "<< hours << ":" << minutes <<endl;
 		}
+		return "";
 	}
 	
 	int dateCompare(Date_Time check)
