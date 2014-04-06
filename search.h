@@ -12,7 +12,7 @@
 #pragma warning(disable: 4996)
 
 using namespace std;
-//forward declarations
+
 class Date_Time;
 class FlightNode;
 class HubNode;
@@ -24,30 +24,30 @@ void shortest_Search(HubNode* source, string destination, Search* search_temp, S
 HubNode *head = NULL, *hubTemp;
 FlightNode *flightTemp;
 
-class Search 
+class Search
 {
 public:
 	int total_bags;
-
 	Date_Time *time;
-	Date_Time *endTime;
 	FlightNode *node[2];
 	HubNode *source;
 	HubNode *destination;
 
-	Search()
+	Search::Search()
 	{
 		time = new Date_Time();
+		source = NULL;
+		destination = NULL;
 	}
 	
-	~Search()
+	Search::~Search()
 	{
 		delete time;
 		source = NULL;
 		destination = NULL;
 	}
 	
-	float cost(int flight_bags) //calculates cost+ any baggage fees
+	float Search::cost(int flight_bags) 
 	{
 		float cost;
 	
@@ -60,17 +60,16 @@ public:
 	
 		else
 		{
-		   for (int i = 0; (i < 2 && node[i] != NULL); i++)
-		   {
-			 node[i]->setBags(flight_bags);
-			 cost = cost + (float) node[i]->price + (float) node[i]->getBaggageFees();
-		   }
+			for (int i = 0; (i < 2 && node[i] != NULL); i++)
+			{
+				node[i]->setBags(flight_bags);
+				cost = cost + (float) node[i]->price + (float) node[i]->getBaggageFees();
+			}
 		}
-	    
 		return cost;
 	}
 
-	void printHub() //prints info in hub
+	void Search::printHub()
 	{
 		hubTemp = head;
 		
@@ -87,22 +86,21 @@ public:
 		}
 	}
 
-	Date_Time* endtime() 
+	Date_Time Search::endTime() 
 	{
 		int tempIT = 0;
-		
-		Date_Time* flight_arrival = node[0]->arriveAt;
+		Date_Time endTime = node[0]->arriveAt;
 	
 		while (node[tempIT] != NULL && tempIT < 2)
 		{
-			flight_arrival = node[tempIT]->arriveAt;
+			endTime = node[tempIT]->arriveAt;
 			tempIT++;
 		}
-	
-		return flight_arrival;
+
+		return endTime;
 	}
 	
-	int flight_time() // prints out total time of flights
+	int Search::flight_time() 
 	{
 		int total_time = 0;
 
@@ -123,7 +121,7 @@ public:
 	}
 };
 
-HubNode* hubSearch(string search) //search through hubs
+HubNode* hubSearch(string search)
 {
 	HubNode *p = head, *b = p;
 
@@ -142,7 +140,7 @@ HubNode* hubSearch(string search) //search through hubs
 }
 
 void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, int total_bags, string searchMethod) 
-{	//searches through flights
+{
 	Search* search_temp = new Search();
 	Search* flight_temp = new Search();
 
@@ -164,7 +162,7 @@ void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, 
 		cheapest_Search(search_temp->source, destination, search_temp, flight_temp, 0, startDate, endDate, total_bags);
 	}
 
-	search_temp->time = search_temp->node[0]->departure;
+	search_temp->time = &search_temp->node[0]->departure;
 
 	search_temp->printHub();
 
@@ -177,9 +175,9 @@ void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, 
 }
 
 
-void cheapest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate, int total_bags)
-{	//algorithim for cheapest flight
-	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && dateCompare(startDate, flight_temp->time) == 0 && dateCompare(flight_temp->endtime(), endDate) == 1 )
+void cheapest_Search(HubNode* source, string dest, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate, int total_bags)
+{
+	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(dest) == 0 && flight_temp->time->dateCompare(*startDate) == 0 && flight_temp->endTime().dateCompare(*endDate) == 1 )
 	{
 		float cheapestCost = search_temp->cost(total_bags);
 		float lowestCost_temp = flight_temp->cost(total_bags);
@@ -211,13 +209,13 @@ void cheapest_Search(HubNode* source, string destination, Search* search_temp, S
 				flight_temp->node[0] = NULL;
 				flight_temp->node[1] = NULL;
 			}
-			if (flight_temp->node[0] == NULL || dateCompare(flight_temp->endtime(), flightNode_temp->departure) >= 0 ) 
+			if (flight_temp->node[0] == NULL || flight_temp->endTime().dateCompare(flightNode_temp->departure) >= 0 ) 
 			{
 				flight_temp->node[depth] = flightNode_temp;
 				flight_temp->destination = flightNode_temp->destination;
-				*flight_temp->time = *flightNode_temp->departure;
+				*flight_temp->time = flightNode_temp->departure;
 				flight_temp->time->AddMinutes(flightNode_temp->getDelay());
-				cheapest_Search(flightNode_temp->destination,destination, search_temp, flight_temp, (depth + 1), startDate, endDate, total_bags);
+				cheapest_Search(flightNode_temp->destination,dest, search_temp, flight_temp, (depth + 1), startDate, endDate, total_bags);
 			}
 
 			flightNode_temp = flightNode_temp->next;
@@ -226,8 +224,8 @@ void cheapest_Search(HubNode* source, string destination, Search* search_temp, S
 }
 
 void shortest_Search(HubNode* source, string destination, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate) 
-{	//algorithim for shortest flight
-	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && dateCompare(startDate, flight_temp->time) >= 0 && dateCompare(flight_temp->endtime(), endDate) >=0 ) 
+{
+	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(destination) == 0 && flight_temp->time->dateCompare(*startDate) >= 0 && flight_temp->endTime().dateCompare(*endDate) >=0 ) 
 	{
 		int leastFlightTime = search_temp->flight_time();
 		int time_Temp = flight_temp->flight_time();
@@ -262,12 +260,12 @@ void shortest_Search(HubNode* source, string destination, Search* search_temp, S
 				flight_temp->node[1] = NULL;
 			}
 
-			if (flight_temp->node[0] == NULL || dateCompare(flight_temp->endtime(), flightNode_temp->departure) >= 0 ) 
+			if (flight_temp->node[0] == NULL || flight_temp->endTime().dateCompare(flightNode_temp->departure) >= 0 ) 
 			{
 				flight_temp->node[depth] = flightNode_temp;
 				flight_temp->destination = flightNode_temp->destination;
 
-				*flight_temp->time = *flightNode_temp->departure;
+				*flight_temp->time = flightNode_temp->departure;
 
 				//*flight_temp->node[depth] = *flightNode_temp->departure;
 				flight_temp->time->AddMinutes(flightNode_temp->getDelay());
