@@ -85,9 +85,11 @@ int main () {
 
 			Date_Time depart = Date_Time(min, hour, day, month, year);
 			Date_Time arrive = depart;
-			flightTemp -> departure = &depart;
+			flightTemp -> departure = depart;
 			arrive.AddMinutes((flightTemp->duration + flightTemp->getDelay()));
+			flightTemp -> arriveAt = arrive;
 
+			
 			hubTemp = hubSearch(source);
 			flightTemp -> source = hubTemp;
 			flightTemp -> destination = hubSearch(destination);
