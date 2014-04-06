@@ -9,20 +9,20 @@
 using namespace std;
 class FlightNode;
 
-class HubNode { //Class for airport terminals.
+class HubNode {
 public:	
 	string Name;
 	string Location;
 	HubNode* next;
 	FlightNode* headFlights;
 
-	HubNode()
+	HubNode::HubNode()
 	{
 		next = NULL;
 		headFlights = NULL;
 	}
 
-	~HubNode()
+	HubNode::~HubNode()
 	{
 		next = NULL;
 	}
