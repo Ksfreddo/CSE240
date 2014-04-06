@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class FlightNode {
+class FlightNode { //parent class
 public:
 	string flightNumber;
 	double price;
@@ -27,7 +27,7 @@ public:
 		next = NULL;
 	}
 
-	virtual ~FlightNode()
+	virtual ~FlightNode() //deconstructor
 	{
 		source = NULL;
 		destination = NULL;
