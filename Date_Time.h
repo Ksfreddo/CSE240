@@ -7,9 +7,9 @@
 
 using namespace std;
 
-typedef enum {Junk, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec} Month; //enum class for months. "Junk" is used so Jan = 1
+typedef enum {Junk, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec} Month;
 
-class Date_Time{ //Function to process dates and times
+class Date_Time{
 public:
 	int minutes;
 	int hours;
@@ -17,12 +17,13 @@ public:
 	int month;
 	int year;
 
-	Date_Time()
+	Date_Time::Date_Time()
 	{
 	}
 
-	Date_Time(int a, int b, int c, int d, int e) //constructor
+	Date_Time::Date_Time(int a, int b, int c, int d, int e)
 	{
+
 		minutes = a;
 		hours = b;
 		day = c;
@@ -30,12 +31,12 @@ public:
 		year = e;
 	}
 
-	void AddMinutes(int min) //error handling for minutes > 60, hours > 24, etc.
+	void AddMinutes(int min)
 	{
 		minutes = minutes + min;
 		if (minutes >= 60)
 		{
-			hous += minutes/60;
+			hours += minutes/60;
 			minutes = minutes % 60;
 			if (hours >= 24)
 			{
@@ -45,7 +46,7 @@ public:
 				{
 					day = day-29;
 					month++;
-				}else if (day > 30 && month == Apr||month ==Jun||month ==Sept||month ==Nov)
+				}else if (day > 30 && (month == Apr||month == Jun||month == Sept||month == Nov))
 				{
 					day = day-30;
 					month++;
@@ -63,20 +64,26 @@ public:
 		}
 	}
 
-	void toString() //toString method
+	void toString()
 	{
-		cout << hours << ":" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
+		if (minutes < 10)
+		{
+			cout << hours << ":0" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
+		}
+		else
+		{
+			cout << hours << ":" << minutes << " "<< month << "/"<< day << "/"<< year << '\n';
+		}
+	}
+	
+	int dateCompare(Date_Time check)
+	{
+		if (day >= check.day && month >= check.month && year >= check.year)
+			return 0;
+		else if(day <= check.day && month <= check.month && year <= check.year)
+			return 1;
+		else
+			return -1;
 	}
 };
-
-int dateCompare(Date_Time* check, Date_Time* flight)
-{
-	if (flight->day >= check->day && flight->month >= check->month && flight->year >= check->year)
-		return 0;
-	else if(flight->day <= check->day && flight->month <= check->month && flight->year <= check->year)
-		return 1;
-	else
-		return -1;
-}
-
 #endif
