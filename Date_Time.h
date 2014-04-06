@@ -7,7 +7,7 @@
 
 using namespace std;
 
-typedef enum {Junk, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec} Month;
+typedef enum {Junk, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sept, Oct, Nov, Dec} Month; //enum class for months
 
 class Date_Time{
 public:
@@ -21,7 +21,7 @@ public:
 	{
 	}
 
-	Date_Time::Date_Time(int a, int b, int c, int d, int e)
+	Date_Time::Date_Time(int a, int b, int c, int d, int e) //constructor
 	{
 
 		minutes = a;
@@ -31,7 +31,7 @@ public:
 		year = e;
 	}
 
-	void AddMinutes(int min)
+	void AddMinutes(int min) //error handling for minutes > 60, hours > 24, etc
 	{
 		minutes = minutes + min;
 		if (minutes >= 60)
@@ -64,7 +64,7 @@ public:
 		}
 	}
 
-	string toString()
+	string toString() //toString method to print info
 	{
 		if (minutes < 10)
 		{
