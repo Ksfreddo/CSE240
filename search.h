@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Date_Time;
+//class Date_Time;
 class FlightNode;
 class HubNode;
 class Search;
@@ -51,7 +51,7 @@ public:
 	{
 		float cost;
 	
-		cost = (float) total_bags;
+		cost = 0;
 	
 		if(node[0] == NULL)
 		{
@@ -69,21 +69,20 @@ public:
 		return cost;
 	}
 
-	void Search::printHub()
-	{
-		hubTemp = head;
-		
-		while (hubTemp != NULL)
+	void Search::printItinerary() 
+	{ //bags, cost, end time, hubs
+		int i = 0;
+		cost(total_bags); //Called to setBags during shortestflight
+		while (node[i] != NULL && i < 2)
 		{
-			FlightNode *flight = hubTemp -> headFlights;
-			cout << hubTemp -> Name << ' ' << hubTemp -> Location << endl;
-			while (flight != NULL)
-			{
-				cout << flight -> flightNumber << endl;
-				flight = flight -> next;
-			}
-			hubTemp = hubTemp -> next;
+			node[i]->toString();
+			i++;
+			cout << '\n';
 		}
+		i--;
+
+		cout << "Number of Bags: " << total_bags << endl;
+		cout <<"Total cost: "<< cost(total_bags) << endl;
 	}
 
 	Date_Time Search::endTime() 
@@ -164,7 +163,7 @@ void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, 
 
 	search_temp->time = &search_temp->node[0]->departure;
 
-	search_temp->printHub();
+	search_temp->printItinerary();
 
 
 	flight_temp->time = NULL;
@@ -177,7 +176,7 @@ void flightSearch(Date_Time* startDate, Date_Time* endDate, string destination, 
 
 void cheapest_Search(HubNode* source, string dest, Search* search_temp, Search* flight_temp, int depth, Date_Time *startDate, Date_Time *endDate, int total_bags)
 {
-	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(dest) == 0 && flight_temp->time->dateCompare(*startDate) == 0 && flight_temp->endTime().dateCompare(*endDate) == 1 )
+	if (flight_temp->destination != NULL && flight_temp->destination->Location.compare(dest) == 0 && flight_temp->time->dateCompare(*startDate) == 0)
 	{
 		float cheapestCost = search_temp->cost(total_bags);
 		float lowestCost_temp = flight_temp->cost(total_bags);
@@ -209,7 +208,7 @@ void cheapest_Search(HubNode* source, string dest, Search* search_temp, Search* 
 				flight_temp->node[0] = NULL;
 				flight_temp->node[1] = NULL;
 			}
-			if (flight_temp->node[0] == NULL || flight_temp->endTime().dateCompare(flightNode_temp->departure) >= 0 ) 
+			if (flight_temp->node[0] == NULL || flight_temp->endTime().dateCompare(flightNode_temp->departure) == 0 ) 
 			{
 				flight_temp->node[depth] = flightNode_temp;
 				flight_temp->destination = flightNode_temp->destination;
