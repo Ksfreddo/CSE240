@@ -99,11 +99,13 @@ int main () {
 		myfile.close();
 	}
 	else cout << "Unable to open file";
-	Date_Time start = Date_Time(00, 0, 16, 12, 2013);
-	Date_Time end = Date_Time(59, 23, 18, 12, 2013);
+	Date_Time start = Date_Time(00, 0, 15, 4, 2014);
+	Date_Time end = Date_Time(59, 23, 20, 4, 2014);
 	Date_Time *startTest = &start, *endTest = &end;
 
 	flightSearch(startTest, endTest, "Los Angeles", 3, "Cheapest");
+	flightSearch(startTest, endTest, "Chicago", 5, "shortest");
+
 	cout << '\n';
 	freeHub();
 	cin >> x;
