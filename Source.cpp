@@ -99,17 +99,10 @@ int main () {
 		myfile.close();
 	}
 	else cout << "Unable to open file";
-		/*Date_Time start = Date_Time(00, 0, 15, 12, 2013);
-	Date_Time end = Date_Time(59, 23, 20, 12, 2013);
-	Date_Time *startTest = &start, *endTest = &end;
-
-	flightSearch(startTest, endTest, "Los Angeles", 3, "Cheapest");
-	flightSearch(startTest, endTest, "Chicago", 5, "Shortest");
-
-	cout << '\n';
-	freeHub();
-	cin >> x; */
-
+		
+		
+	int cont=0;
+	while(cont==0){
 	int iday=0;
 	int imonth=0;
 	int iyear=0;
@@ -119,16 +112,24 @@ int main () {
 	string itype;
 
 	while(imonth==0){
-		cout << "What month would you like to leave(1-12)?";
-			cin >> imonth;
-			if(imonth > 12){
-				cout << "Please enter a valid month.\n";
-				imonth=0;
-			}
+		cout << "What month would you like to leave(1-12)?\n";
+		cin >> imonth;
+		if (cin.fail()){
+			cin.clear();
+			cin.ignore(std::numeric_limits<int>::max(), '\n');
+		}
+		if(imonth>12||imonth==0){
+			cout << "Please enter a valid month.\n";
+			imonth=0;
+		}
 	};
 	while(iday==0){
-		cout << "What day would you like to leave(1-31)?";
+		cout << "What day would you like to leave(1-31)?\n";
 		cin >> iday;
+		if (cin.fail()){
+				cin.clear();
+				cin.ignore(std::numeric_limits<int>::max(), '\n');
+		}
 		if(imonth==1||3||5||7||8||10||12){
 			if(iday>31)
 				iday=0;
@@ -142,15 +143,23 @@ int main () {
 				iday=0;
 		}
 		if (iday==0)
-			cout << "Please enter a valid date.";
+			cout << "Please enter a valid date.\n";
 	};
-	cout << "What year would you like to leave(yyyy)?";
+	cout << "What year would you like to leave(yyyy)?\n";
 	cin >> iyear;
+	if (cin.fail()){
+		cin.clear();
+		cin.ignore(std::numeric_limits<int>::max(), '\n');
+	}
 	while(temp==0){
 		cout << "Where would you like to travel?\n1.Tucson\n2.Los Angeles\n3.San Francisco\n4.San Diego\n5.Albany\n"; 
 		cout <<	"6.Chicago Midway\n7.Chicago O'Hare\n8.General Edward Lawrence Logan\n9.Mc Carran\n10.John F Kennedy\n";
 		cout << "11.Miami\n12.Honolulu\n13.Denver\n";
 		cin >> temp;
+		if (cin.fail()){
+			cin.clear();
+			cin.ignore(std::numeric_limits<int>::max(), '\n');
+		}
 		switch (temp) {
 			case 1:
 				idest="Tucson";
@@ -192,12 +201,12 @@ int main () {
 				idest="Denver";
 				break;
 			default:
-				cout << "Please enter a valid destination.";
+				cout << "Please enter a valid destination.\n";
 				temp=0;
 		}
 	} 
 	while(itype.empty()){
-		cout << "Would you like the cheapest flight or shortest?(c or s)";
+		cout << "Would you like the cheapest flight or shortest?(c or s)\n";
 		cin >> itype;
 		if(itype=="c")
 			itype="Cheapest";
@@ -208,17 +217,34 @@ int main () {
 			itype.clear();
 		}
 	}
-	cout << "How many bags?";
+	cout << "How many bags?\n";
 	cin >> ibag;
-
 
 	Date_Time start = Date_Time(00,0,iday,imonth,iyear);
 	Date_Time end = Date_Time(59,23,18,12,2014);
 	Date_Time *startTest = &start, *endTest = &end;
 
 	flightSearch(startTest, endTest, idest, ibag, itype);
-
-	cout << '\n';
 	freeHub();
-	cin >> x; 
+
+	int x=0;
+	while(x==0){
+		cout << "Would you like to search again?\n1.No\n2.Yes";
+		cin >> temp;
+		if (cin.fail()){
+			cin.clear();
+			cin.ignore(std::numeric_limits<int>::max(), '\n');
+		}
+		if(temp==1){
+			cont=0;
+			x=1;
+		}
+		else if(temp==2){
+			cont=1;
+			x=1;
+		}
+		else
+			cout << "Please enter 1 or 2.";
+	}
+	}
 }
