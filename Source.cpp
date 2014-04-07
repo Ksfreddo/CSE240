@@ -99,14 +99,126 @@ int main () {
 		myfile.close();
 	}
 	else cout << "Unable to open file";
-	Date_Time start = Date_Time(00, 0, 15, 4, 2014);
-	Date_Time end = Date_Time(59, 23, 20, 4, 2014);
+		/*Date_Time start = Date_Time(00, 0, 15, 12, 2013);
+	Date_Time end = Date_Time(59, 23, 20, 12, 2013);
 	Date_Time *startTest = &start, *endTest = &end;
 
 	flightSearch(startTest, endTest, "Los Angeles", 3, "Cheapest");
-	flightSearch(startTest, endTest, "Chicago", 5, "shortest");
+	flightSearch(startTest, endTest, "Chicago", 5, "Shortest");
 
 	cout << '\n';
 	freeHub();
-	cin >> x;
+	cin >> x; */
+
+	int iday=0;
+	int imonth=0;
+	int iyear=0;
+	int ibag=0;
+	int temp=0;
+	string idest;
+	string itype;
+
+	while(imonth==0){
+		cout << "What month would you like to leave(1-12)?";
+			cin >> imonth;
+			if(imonth > 12){
+				cout << "Please enter a valid month.\n";
+				imonth=0;
+			}
+	};
+	while(iday==0){
+		cout << "What day would you like to leave(1-31)?";
+		cin >> iday;
+		if(imonth==1||3||5||7||8||10||12){
+			if(iday>31)
+				iday=0;
+		}
+		else if(imonth==2){
+			if(iday>29)
+				iday=0;
+		}
+		else if(imonth==4||6||9||11){
+			if(iday>30)
+				iday=0;
+		}
+		if (iday==0)
+			cout << "Please enter a valid date.";
+	};
+	cout << "What year would you like to leave(yyyy)?";
+	cin >> iyear;
+	while(temp==0){
+		cout << "Where would you like to travel?\n1.Tucson\n2.Los Angeles\n3.San Francisco\n4.San Diego\n5.Albany\n"; 
+		cout <<	"6.Chicago Midway\n7.Chicago O'Hare\n8.General Edward Lawrence Logan\n9.Mc Carran\n10.John F Kennedy\n";
+		cout << "11.Miami\n12.Honolulu\n13.Denver\n";
+		cin >> temp;
+		switch (temp) {
+			case 1:
+				idest="Tucson";
+				break;
+			case 2:
+				idest="Los Angeles";
+			    break;
+			case 3: 
+				idest="San Francisco";
+				break;   
+			case 4:
+				idest="San Diego";
+				break;
+			case 5:
+				idest="Albany";
+				break;
+			case 6:
+				idest="Chicago Midway";
+				break;
+			case 7:
+				idest="Chicago O'Hare";
+			    break;
+			case 8:
+				idest="General Edward Lawrence Logan";
+				break;
+			case 9:
+				idest="Mc Carran";
+			    break;
+			case 10:
+				idest="John F Kennedy";
+			    break;
+			case 11:
+				idest="Miami";
+				break;
+			case 12:
+				idest="Honolulu";
+			    break;
+			case 13:
+				idest="Denver";
+				break;
+			default:
+				cout << "Please enter a valid destination.";
+				temp=0;
+		}
+	} 
+	while(itype.empty()){
+		cout << "Would you like the cheapest flight or shortest?(c or s)";
+		cin >> itype;
+		if(itype=="c")
+			itype="Cheapest";
+		else if(itype=="s")
+			itype="Shortest";
+		else{
+			cout << "Please enter c or s.";
+			itype.clear();
+		}
+	}
+	cout << "How many bags?";
+	cin >> ibag;
+
+
+	Date_Time start = Date_Time(00,0,iday,imonth,iyear);
+	Date_Time end = Date_Time(59,23,18,12,2014);
+	Date_Time *startTest = &start, *endTest = &end;
+
+	flightSearch(startTest, endTest, idest, ibag, itype);
+
+	cout << '\n';
+	freeHub();
+	cin >> x; 
 }
