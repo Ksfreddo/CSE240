@@ -228,6 +228,7 @@ int main () {
 	freeHub();
 
 	int x=0;
+	temp=0;
 	while(x==0){
 		cout << "Would you like to search again?\n1.No\n2.Yes";
 		cin >> temp;
